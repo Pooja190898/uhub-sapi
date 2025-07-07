@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="4d71f1cc-a9e8-41a5-9d2b-ef84effdfa18" basePath="covid" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="uhubFlow" doc:id="5e6fa6f7-db82-48fc-a1cf-dae4bea3d0dd" >
+		<http:listener doc:name="Listener" doc:id="a75af601-789e-4ca1-9ff8-6135135cce5f" config-ref="HTTP_Listener_config" path="v1/cases" allowedMethods="POST">
+			<http:response statusCode="#[vars.sucesscode]" />
+		</http:listener>
+		<set-variable value="#[payload.source]" doc:name="Set Variable" doc:id="17ec02cd-7342-431d-be6f-867ab2c046c2" variableName="source"/>
+		<logger level="INFO" doc:name="Logger" doc:id="f028e17b-bb4c-4bbd-b707-f9fa2665afc5" message="#[vars.source]"/>
+		<set-variable value="200" doc:name="successcode" doc:id="a22b68e8-0e55-4df1-85ab-81fe0816ab91" variableName="sucesscode"/>
+	</flow>
+</mule>
